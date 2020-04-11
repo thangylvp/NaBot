@@ -36,7 +36,16 @@ namespace CONTROL
         void odomCallback(const nav_msgs::Odometry::ConstPtr& msg);
         void pathplnCallback(const std_msgs::Float32MultiArray::ConstPtr& msg);
         float odomToDistance(nav_msgs::Odometry curOdom, nav_msgs::Odometry preOdom);
+        bool checkDoneMoving();
+        bool checkDoneTurning();
+        void idle();
+        void moving();
+        void turning();
         nav_msgs::Odometry curOdom, preOdom;
+        bool newPathplnMessage = false;
+        ROBOTSTATE curRState;
+        float targetValue;
+        ACTION targetAction;
     private:
         ros::NodeHandle nh;
         ros::Subscriber subOdom;
@@ -44,11 +53,9 @@ namespace CONTROL
         ros::Publisher pubCommand;
         std_msgs::Float32MultiArray command;
         
-        float targetValue;
-        bool newPathplnMessage = false;
-        ACTION targetAction;
+        
         ACTION intToAction[6] = {ACTION::FORWARD, ACTION::LEFT, ACTION::BACK, ACTION::RIGHT, ACTION::ROTATE_LEFT, ACTION::ROTATE_RIGHT};
-        ROBOTSTATE curRState;
+        
     };
 }
 #endif

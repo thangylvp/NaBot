@@ -26,3 +26,36 @@ void CONTROL::Controller::pathplnCallback(const std_msgs::Float32MultiArray::Con
     newPathplnMessage = true;
 }
 
+void CONTROL::Controller::idle() {
+    if (newPathplnMessage) {
+        newPathplnMessage = false;
+        if (targetAction < 4) 
+            curRState = ROBOTSTATE::MOVING;
+        else 
+            curRState = ROBOTSTATE::TURNING;
+    }
+}
+
+void CONTROL::Controller::moving() {
+    if (checkDoneMoving()) {
+        curRState = ROBOTSTATE::IDLE;
+        return;
+    }
+    // moving
+}
+
+void CONTROL::Controller::turning() {
+    if (checkDoneTurning()) {
+        curRState = ROBOTSTATE::IDLE;
+        return;
+    }
+    // turning
+}
+
+bool CONTROL::Controller::checkDoneMoving() {
+    return false;
+}
+
+bool CONTROL::Controller::checkDoneTurning() {
+    return false;
+}
