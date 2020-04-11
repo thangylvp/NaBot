@@ -7,6 +7,7 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
   nav_msgs
   geometry_msgs
+    tf
 )
 
 catkin_package(
@@ -21,6 +22,7 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
-
 add_executable(test_angular src/test_angular.cpp)
 target_link_libraries(test_angular ${catkin_LIBRARIES})
+add_executable(test_cartographer src/test_cartographer.cpp)
+target_link_libraries(test_cartographer ${catkin_LIBRARIES})
