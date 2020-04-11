@@ -24,5 +24,9 @@ include_directories(
 
 add_executable(test_angular src/test_angular.cpp)
 target_link_libraries(test_angular ${catkin_LIBRARIES})
+
 add_executable(test_cartographer src/test_cartographer.cpp)
 target_link_libraries(test_cartographer ${catkin_LIBRARIES})
+
+add_executable(test_controller src/test_controller.cpp src/header/controller.h src/header/controller.cpp)
+target_link_libraries(test_controller ${catkin_LIBRARIES})
