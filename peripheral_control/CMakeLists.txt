@@ -1,0 +1,26 @@
+cmake_minimum_required(VERSION 2.8.3)
+project(peripheral_control)
+
+find_package(catkin REQUIRED COMPONENTS
+  roscpp
+  rospy
+  std_msgs
+  nav_msgs
+  geometry_msgs
+)
+
+catkin_package(
+#  INCLUDE_DIRS include
+#  LIBRARIES peripheral_control
+#  CATKIN_DEPENDS roscpp rospy std_msgs
+#  DEPENDS system_lib
+)
+
+include_directories(
+# include
+  ${catkin_INCLUDE_DIRS}
+)
+
+
+add_executable(test_angular src/test_angular.cpp)
+target_link_libraries(test_angular ${catkin_LIBRARIES})
