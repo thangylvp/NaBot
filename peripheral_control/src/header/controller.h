@@ -8,7 +8,7 @@
 #include "std_msgs/String.h"
 #include "nav_msgs/Odometry.h"
 #include "geometry_msgs/Pose2D.h"
-
+#include "math.h"
 #ifndef CONTROLLER_H
 #define CONTROLLER_H
 namespace CONTROL
@@ -35,11 +35,13 @@ namespace CONTROL
         ~Controller();
 
         void sendCommand(ACTION actionType);
+        void sendState();
         void odomCallback(const nav_msgs::Odometry::ConstPtr& msg);
         void pathplnCallback(const std_msgs::Float32MultiArray::ConstPtr& msg);
         float odomToDistance(nav_msgs::Odometry curOdom, nav_msgs::Odometry preOdom);
         bool checkDoneMoving();
         bool checkDoneTurning();
+        bool checkSTOP();
         void idle();
         void moving();
         void turning();
@@ -53,7 +55,8 @@ namespace CONTROL
         ros::Subscriber subOdom;
         ros::Subscriber subPathpln;
         ros::Publisher pubCommand;
-        std_msgs::Int8 command;
+        ros::Publisher pubState;
+        std_msgs::Int8 command, rState;
         
         
         ACTION intToAction[7] = {ACTION::FORWARD, ACTION::LEFT, ACTION::BACK, ACTION::RIGHT, ACTION::ROTATE_LEFT, ACTION::ROTATE_RIGHT, ACTION::STOP};

@@ -16,7 +16,8 @@ int main(int argc, char **argv)
 
  	while (ros::ok())
  	{
-		ROS_INFO("CUR POS -> x: [%f], y: [%f], z: [%f]", main_controller.curOdom.pose.pose.position.x, main_controller.curOdom.pose.pose.position.y, main_controller.curOdom.pose.pose.position.z);
+		// ROS_INFO("CUR POS -> x: [%f], y: [%f], z: [%f]", main_controller.curOdom.pose.pose.position.x, main_controller.curOdom.pose.pose.position.y, main_controller.curOdom.pose.pose.position.z);
+		
 		switch (main_controller.curRState)
 		{
 		case CONTROL::ROBOTSTATE::IDLE : 
@@ -31,6 +32,7 @@ int main(int argc, char **argv)
 		default:
 			break;
 		}
+		main_controller.sendState();
 		ros::spinOnce();
 	}
 	return 0;
