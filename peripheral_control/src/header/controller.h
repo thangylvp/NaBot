@@ -9,6 +9,8 @@
 #include "nav_msgs/Odometry.h"
 #include "geometry_msgs/Pose2D.h"
 #include "math.h"
+#include <tf/transform_listener.h>
+
 #ifndef CONTROLLER_H
 #define CONTROLLER_H
 namespace CONTROL
@@ -45,12 +47,15 @@ namespace CONTROL
         void idle();
         void moving();
         void turning();
+        void updateTransform();
         nav_msgs::Odometry curOdom, preOdom;
         int countRotate;
         bool newPathplnMessage = false;
         ROBOTSTATE curRState = ROBOTSTATE::IDLE;
         float targetValue;
         ACTION targetAction;
+
+
     private:
         ros::NodeHandle nh;
         ros::Subscriber subOdom;
@@ -58,6 +63,9 @@ namespace CONTROL
         ros::Publisher pubCommand;
         ros::Publisher pubState;
         std_msgs::Int8 command, rState;
+
+        tf::TransformListener tf_listener;
+        tf::StampedTransform transform_map_baselink;
         
         
         ACTION intToAction[7] = {ACTION::FORWARD, ACTION::LEFT, ACTION::BACK, ACTION::RIGHT, ACTION::ROTATE_LEFT, ACTION::ROTATE_RIGHT, ACTION::STOP};

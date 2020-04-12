@@ -110,6 +110,29 @@ bool CONTROL::Controller::checkSTOP() {
     
 }
 
+void CONTROL::Controller::updateTransform()
+{
+    try{
+        tf_listener.lookupTransform("map", "base_link",ros::Time(0), transform_map_baselink);
+
+//        tf::Vector3 tfVec = transform_map_baselink.getOrigin();
+//        geometry_msgs::Point pt;
+//        pt.x = tfVec.getX();pt.y = tfVec.getY();pt.z = tfVec.getZ();
+//        ROS_INFO("x: [%f], y: [%f], z: [%f]", pt.x, pt.y, pt.z);
+
+//        tf::Quaternion tfQuat = transform_map_baselink.getRotation();
+//        geometry_msgs::Quaternion quat;
+//        quat.x = tfQuat.x();quat.y = tfQuat.y();quat.z = tfQuat.z();quat.w = tfQuat.w();
+//        ROS_INFO("Qx: [%f], Qy: [%f], Qz: [%f], Qw: [%f]", quat.x, quat.y, quat.z, quat.w);
+
+    }
+    catch (tf::TransformException &ex) {
+        ROS_ERROR("%s",ex.what());
+        ros::Duration(1.0).sleep();
+    }
+
+}
+
 float CONTROL::Controller::odomToDistance(nav_msgs::Odometry curOdom, nav_msgs::Odometry preOdom) {
     
     float dx = curOdom.pose.pose.position.x - preOdom.pose.pose.position.x;

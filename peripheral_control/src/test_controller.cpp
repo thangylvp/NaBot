@@ -17,7 +17,8 @@ int main(int argc, char **argv)
  	while (ros::ok())
  	{
 		// ROS_INFO("CUR POS -> x: [%f], y: [%f], z: [%f]", main_controller.curOdom.pose.pose.position.x, main_controller.curOdom.pose.pose.position.y, main_controller.curOdom.pose.pose.position.z);
-		
+		main_controller.updateTransform();
+
 		switch (main_controller.curRState)
 		{
 		case CONTROL::ROBOTSTATE::IDLE : 
