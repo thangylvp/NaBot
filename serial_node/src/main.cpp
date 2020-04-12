@@ -2,15 +2,46 @@
 #include <serial/serial.h>
 #include <std_msgs/String.h>
 #include <std_msgs/Empty.h>
+#include "std_msgs/Int8.h"
 #include <string.h>
 #include <stdio.h>
 
 serial::Serial ser;
 
-void cmd_callback(const std_msgs::String::ConstPtr& msg)
+enum ACTION {
+    FORWARD = 0,
+    LEFT = 1,
+    BACK = 2,
+    RIGHT = 3,
+    ROTATE_LEFT = 4,
+    ROTATE_RIGHT = 5,
+    STOP = 6
+};
+
+void cmd_callback(const std_msgs::Int8::ConstPtr& msg)
 {
     ROS_INFO_STREAM("Writing from serial port " <<  msg->data);
-    ser.write(msg->data);
+    if (msg->data == FORWARD){
+        ser.write("u");
+    }
+    if (msg->data == LEFT){
+        ser.write("l");
+    } 
+    if (msg->data == BACK){
+        ser.write("d");
+    } 
+    if (msg->data == RIGHT){
+        ser.write("d");
+    } 
+    if (msg->data == ROTATE_LEFT){
+        ser.write("e");
+    } 
+    if (msg->data == ROTATE_RIGHT){
+        ser.write("f");
+    } 
+    if (msg->data == STOP){
+        ser.write("q");
+    } 
 }
 
 int main (int argc, char** argv){
@@ -51,13 +82,6 @@ int main (int argc, char** argv){
 	    std::string tmp;
 	    fflush(stdin);
 
-        if(ser.available()){
-            ROS_INFO_STREAM("Reading from serial port");
-            std_msgs::String result;
-            result.data = ser.read(ser.available());
-            ROS_INFO_STREAM("Read: " << result.data);
-            status_pub.publish(status);
-        }
         loop_rate.sleep();
     }
 }
