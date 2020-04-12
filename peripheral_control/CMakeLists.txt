@@ -30,3 +30,6 @@ target_link_libraries(test_cartographer ${catkin_LIBRARIES})
 
 add_executable(test_controller src/test_controller.cpp src/header/controller.h src/header/controller.cpp)
 target_link_libraries(test_controller ${catkin_LIBRARIES})
+
+add_executable(fake_control src/fake_control.cpp)
+target_link_libraries(fake_control ${catkin_LIBRARIES})

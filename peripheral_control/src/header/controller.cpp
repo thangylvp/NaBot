@@ -25,6 +25,7 @@ void CONTROL::Controller::odomCallback(const nav_msgs::Odometry::ConstPtr& msg) 
 }
 
 void CONTROL::Controller::pathplnCallback(const std_msgs::Float32MultiArray::ConstPtr& msg) {
+    std::cerr << "New request" << std::endl;
     targetAction = intToAction[(int)msg->data[0]];
     targetValue = msg->data[1];
     newPathplnMessage = true;
@@ -45,6 +46,7 @@ void CONTROL::Controller::idle() {
 }
 
 void CONTROL::Controller::moving() {
+    // std::cerr << "Moving" << std::endl;
     if (checkSTOP()) {
         curRState = ROBOTSTATE::IDLE;
         sendCommand(ACTION::STOP);
@@ -76,7 +78,9 @@ void CONTROL::Controller::turning() {
 }
 
 bool CONTROL::Controller::checkDoneMoving() {
-    if (fabs(odomToDistance(curOdom, preOdom) - targetValue) < 0.05) 
+    float distance = fabs(odomToDistance(curOdom, preOdom) - targetValue);
+    // std::cerr << "DISTANCE " << distance << std::endl;
+    if (distance < 0.05) 
         return true;
     return false;
 }
