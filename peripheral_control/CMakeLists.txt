@@ -10,6 +10,10 @@ find_package(catkin REQUIRED COMPONENTS
     tf
 )
 
+find_package(OpenCV REQUIRED)
+
+
+
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES peripheral_control
@@ -20,6 +24,7 @@ catkin_package(
 include_directories(
 # include
   ${catkin_INCLUDE_DIRS}
+    ${OpenCV_INCLUDE_DIRS}
 )
 
 add_executable(test_angular src/test_angular.cpp)
@@ -27,6 +32,9 @@ target_link_libraries(test_angular ${catkin_LIBRARIES})
 
 add_executable(test_cartographer src/test_cartographer.cpp)
 target_link_libraries(test_cartographer ${catkin_LIBRARIES})
+
+add_executable(test_map src/test_map.cpp)
+target_link_libraries(test_map ${catkin_LIBRARIES} ${OpenCV_LIBS})
 
 add_executable(test_controller src/test_controller.cpp src/header/controller.h src/header/controller.cpp)
 target_link_libraries(test_controller ${catkin_LIBRARIES})
