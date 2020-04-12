@@ -10,8 +10,8 @@
 int main(int argc, char **argv)
 {
 	ros::init(argc, argv, "control_test");
-	std::string odomTopic = "/camera/odom/sample";
-	std::string pathplnTopic = "/xxx";
+	std::string odomTopic = "camera/odom/sample";
+	std::string pathplnTopic = "xxx";
 	CONTROL::Controller main_controller(odomTopic, pathplnTopic);
 
  	while (ros::ok())

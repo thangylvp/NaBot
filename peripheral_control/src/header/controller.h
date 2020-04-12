@@ -46,8 +46,9 @@ namespace CONTROL
         void moving();
         void turning();
         nav_msgs::Odometry curOdom, preOdom;
+        int countRotate;
         bool newPathplnMessage = false;
-        ROBOTSTATE curRState;
+        ROBOTSTATE curRState = ROBOTSTATE::IDLE;
         float targetValue;
         ACTION targetAction;
     private:

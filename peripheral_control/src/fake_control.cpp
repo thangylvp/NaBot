@@ -67,8 +67,8 @@ int main(int argc, char **argv)
 
 	ros::init(argc, argv, "fake_control");
     ros::NodeHandle n;
-	ros::Subscriber subState = n.subscribe("/robot_state", 1000, chatter9);
-    ros::Publisher pub = n.advertise<std_msgs::Float32MultiArray>("xxx", 100);
+	ros::Subscriber subState = n.subscribe("robot_state", 1, chatter9);
+    ros::Publisher pub = n.advertise<std_msgs::Float32MultiArray>("xxx", 10);
     std_msgs::Float32MultiArray array;
  	while (ros::ok())
  	{
@@ -88,7 +88,20 @@ int main(int argc, char **argv)
             std::cerr << array.data[0] <<  " "<< array.data[1] << std::endl;
             pub.publish(array);
         }
-
+        if (key == 'k') {
+            array.data.clear();
+            array.data.push_back(ACTION::ROTATE_LEFT);
+            array.data.push_back(10.0);
+            std::cerr << array.data[0] <<  " "<< array.data[1] << std::endl;
+            pub.publish(array);
+        }
+        if (key == 'l') {
+            array.data.clear();
+            array.data.push_back(ACTION::ROTATE_RIGHT);
+            array.data.push_back(30.0);
+            std::cerr << array.data[0] <<  " "<< array.data[1] << std::endl;
+            pub.publish(array);
+        }
         ros::spinOnce();
 	}
 	return 0;
