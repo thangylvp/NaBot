@@ -3,6 +3,7 @@
 #include "std_msgs/Float32MultiArray.h"
 #include "std_msgs/MultiArrayDimension.h"
 #include "std_msgs/MultiArrayLayout.h"
+#include "std_msgs/Int8.h"
 #include "tf/tf.h"
 #include "std_msgs/String.h"
 #include "nav_msgs/Odometry.h"
@@ -24,7 +25,8 @@ namespace CONTROL
         BACK = 2,
         RIGHT = 3,
         ROTATE_LEFT = 4,
-        ROTATE_RIGHT = 5
+        ROTATE_RIGHT = 5,
+        STOP = 6
     };
 
     class Controller{
@@ -32,7 +34,7 @@ namespace CONTROL
         Controller(std::string odomTopic, std::string pathplnTopic);
         ~Controller();
 
-        void sendCommand(ACTION actionType, float value);
+        void sendCommand(ACTION actionType);
         void odomCallback(const nav_msgs::Odometry::ConstPtr& msg);
         void pathplnCallback(const std_msgs::Float32MultiArray::ConstPtr& msg);
         float odomToDistance(nav_msgs::Odometry curOdom, nav_msgs::Odometry preOdom);
@@ -51,10 +53,10 @@ namespace CONTROL
         ros::Subscriber subOdom;
         ros::Subscriber subPathpln;
         ros::Publisher pubCommand;
-        std_msgs::Float32MultiArray command;
+        std_msgs::Int8 command;
         
         
-        ACTION intToAction[6] = {ACTION::FORWARD, ACTION::LEFT, ACTION::BACK, ACTION::RIGHT, ACTION::ROTATE_LEFT, ACTION::ROTATE_RIGHT};
+        ACTION intToAction[7] = {ACTION::FORWARD, ACTION::LEFT, ACTION::BACK, ACTION::RIGHT, ACTION::ROTATE_LEFT, ACTION::ROTATE_RIGHT, ACTION::STOP};
         
     };
 }

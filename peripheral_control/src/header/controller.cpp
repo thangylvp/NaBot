@@ -3,16 +3,14 @@
 CONTROL::Controller::Controller(std::string odomTopic, std::string pathplnTopic) {
     subOdom = nh.subscribe(odomTopic, 1, &Controller::odomCallback, this);
     subPathpln = nh.subscribe(pathplnTopic, 1, &Controller::pathplnCallback, this);
-    pubCommand = nh.advertise<std_msgs::Float32MultiArray>("array", 10);
+    pubCommand = nh.advertise<std_msgs::Int8>("control_command", 1000);
 }
 CONTROL::Controller::~Controller() {
     
 }
 
-void CONTROL::Controller::sendCommand(ACTION actionType, float value) {
-    command.data.clear();
-    command.data.push_back((float)actionType);
-    command.data.push_back(value);
+void CONTROL::Controller::sendCommand(ACTION actionType) {
+    command.data = actionType;
     pubCommand.publish(command);
 }
 
@@ -39,6 +37,7 @@ void CONTROL::Controller::idle() {
 void CONTROL::Controller::moving() {
     if (checkDoneMoving()) {
         curRState = ROBOTSTATE::IDLE;
+        sendCommand(ACTION::STOP);
         return;
     }
     // moving
@@ -47,6 +46,7 @@ void CONTROL::Controller::moving() {
 void CONTROL::Controller::turning() {
     if (checkDoneTurning()) {
         curRState = ROBOTSTATE::IDLE;
+        sendCommand(ACTION::STOP);
         return;
     }
     // turning
