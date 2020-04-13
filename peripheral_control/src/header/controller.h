@@ -43,6 +43,7 @@ namespace CONTROL
         void pathplnCallback(const std_msgs::Float32MultiArray::ConstPtr& msg);
         void robotPoseCallback(const geometry_msgs::PoseStamped::ConstPtr& msg);
         float odomToDistance(nav_msgs::Odometry curOdom, nav_msgs::Odometry preOdom);
+        float geomsgsToDistance(geometry_msgs::PoseStamped curRobotPose, geometry_msgs::PoseStamped preRobotPose);
         bool checkDoneMoving();
         bool checkDoneTurning();
         bool checkSTOP();
@@ -56,7 +57,7 @@ namespace CONTROL
         ROBOTSTATE curRState = ROBOTSTATE::IDLE;
         float targetValue;
         ACTION targetAction;
-        geometry_msgs::PoseStamped curRobotPose;
+        geometry_msgs::PoseStamped curRobotPose, preRobotPose;
 
     private:
         ros::NodeHandle nh;

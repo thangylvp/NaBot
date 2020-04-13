@@ -42,7 +42,8 @@ void CONTROL::Controller::pathplnCallback(const std_msgs::Float32MultiArray::Con
 void CONTROL::Controller::idle() {
     if (newPathplnMessage) {
         newPathplnMessage = false;
-        preOdom = curOdom;
+        // preOdom = curOdom;
+        preRobotPose = curRobotPose;
         countRotate = 0;
         if (targetAction < 4) 
             curRState = ROBOTSTATE::MOVING;
@@ -89,7 +90,7 @@ void CONTROL::Controller::turning() {
 }
 
 bool CONTROL::Controller::checkDoneMoving() {
-    float distance = fabs(odomToDistance(curOdom, preOdom) - targetValue);
+    float distance = fabs(geomsgsToDistance(curRobotPose, preRobotPose) - targetValue);
     // std::cerr << "DISTANCE " << distance << std::endl;
     if (distance < 0.05) 
         return true;
@@ -143,6 +144,14 @@ float CONTROL::Controller::odomToDistance(nav_msgs::Odometry curOdom, nav_msgs::
     float dx = curOdom.pose.pose.position.x - preOdom.pose.pose.position.x;
     float dy = curOdom.pose.pose.position.y - preOdom.pose.pose.position.y;
     float dz = curOdom.pose.pose.position.z - preOdom.pose.pose.position.z;
+
+    return std::sqrt(dx * dx + dy * dy + dz * dz);
+}
+
+float CONTROL::Controller::geomsgsToDistance(geometry_msgs::PoseStamped curRobotPose, geometry_msgs::PoseStamped preRobotPose) {
+    float dx = curRobotPose.pose.position.x - preRobotPose.pose.position.x;
+    float dy = curRobotPose.pose.position.y - preRobotPose.pose.position.y;
+    float dz = curRobotPose.pose.position.z - preRobotPose.pose.position.z;
 
     return std::sqrt(dx * dx + dy * dy + dz * dz);
 }
