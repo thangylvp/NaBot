@@ -44,3 +44,6 @@ target_link_libraries(fake_control ${catkin_LIBRARIES})
 
 add_executable(test1 src/test1.cpp)
 target_link_libraries(test1 ${catkin_LIBRARIES})
+
+add_executable(testPC src/testPC.cpp)
+target_link_libraries(testPC ${catkin_LIBRARIES})

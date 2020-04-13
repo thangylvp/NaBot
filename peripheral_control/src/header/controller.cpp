@@ -4,8 +4,8 @@ CONTROL::Controller::Controller(std::string odomTopic, std::string pathplnTopic,
     subOdom = nh.subscribe(odomTopic, 1, &Controller::odomCallback, this);
     subPathpln = nh.subscribe(pathplnTopic, 1, &Controller::pathplnCallback, this);
     subRobotPose = nh.subscribe(robotPoseTopic, 1, &Controller::robotPoseCallback, this);
-    pubCommand = nh.advertise<std_msgs::Int16>("control_command", 10);
-    pubState = nh.advertise<std_msgs::Int8>("robot_state", 10);
+    pubCommand = nh.advertise<std_msgs::Int16>("control_command", 1);
+    pubState = nh.advertise<std_msgs::Int8>("robot_state", 1);
 }
 CONTROL::Controller::~Controller() {
     
@@ -94,7 +94,7 @@ void CONTROL::Controller::turning() {
 
 bool CONTROL::Controller::checkDoneMoving() {
     float distance = fabs(geomsgsToDistance(curRobotPose, preRobotPose) - targetValue);
-    std::cerr << "DISTANCE " << distance << std::endl;
+    // std::cerr << "DISTANCE " << distance << std::endl;
     if (distance < 0.05) 
         return true;
     return false;

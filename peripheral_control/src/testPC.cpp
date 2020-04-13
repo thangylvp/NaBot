@@ -65,7 +65,7 @@ enum ACTION {
 };
 
 ACTION listAction[5] = {ACTION::FORWARD, ACTION::RIGHT, ACTION::BACK, ACTION::RIGHT, ACTION::FORWARD};
-float distance[5] = {2.0, 0.2, 2.0, 0.2, 2.0};
+float distance[5] = {0.2, 0.1, 0.2, 0.1, 0.2};
 //ACTION listAction[1] = {ACTION::FORWARD};
 //float distance[1] = {0.2};
 int main(int argc, char **argv)
