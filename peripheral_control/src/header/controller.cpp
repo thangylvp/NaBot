@@ -13,6 +13,7 @@ CONTROL::Controller::~Controller() {
 
 void CONTROL::Controller::sendCommand(ACTION actionType) {
     command.data = actionType;
+    std::cerr << "SEND ACTION : " << actionType << std::endl;
     pubCommand.publish(command);
 }
 
@@ -45,13 +46,15 @@ void CONTROL::Controller::idle() {
         // preOdom = curOdom;
         preRobotPose = curRobotPose;
         countRotate = 0;
-        if (targetAction < 4) 
+        if (targetAction == ACTION::STOP || targetAction == ACTION::INTERRUPT) {
+            return;
+        }
+        if (targetAction == ACTION::FORWARD || targetAction == ACTION::BACK || targetAction == ACTION::LEFT || targetAction == ACTION ::RIGHT) 
             curRState = ROBOTSTATE::MOVING;
-        else 
-        if (targetAction < 6)
+        
+        if (targetAction == ACTION::ROTATE_LEFT || targetAction == ACTION::ROTATE_RIGHT)
             curRState = ROBOTSTATE::TURNING;
-        else 
-            curRState = ROBOTSTATE::IDLE;
+        
     }
 }
 
