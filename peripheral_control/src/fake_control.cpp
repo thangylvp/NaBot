@@ -78,28 +78,28 @@ int main(int argc, char **argv)
             array.data.clear();
             array.data.push_back(ACTION::FORWARD);
             array.data.push_back(1.0);
-            std::cerr << array.data[0] <<  " "<< array.data[1] << std::endl;
+            std::cerr << array.data[0] <<  " " << array.data[1] << std::endl;
             pub.publish(array);
         }
         if (key == 's'){
             array.data.clear();
             array.data.push_back(ACTION::STOP);
-            array.data.push_back(1.0);
-            std::cerr << array.data[0] <<  " "<< array.data[1] << std::endl;
+            array.data.push_back(0.0);
+            std::cerr << array.data[0] <<  " " << array.data[1] << std::endl;
             pub.publish(array);
         }
-        if (key == 'k') {
+        if (key == 'l'){
             array.data.clear();
             array.data.push_back(ACTION::ROTATE_LEFT);
-            array.data.push_back(10.0);
-            std::cerr << array.data[0] <<  " "<< array.data[1] << std::endl;
+            array.data.push_back(50.0);
+            std::cerr << array.data[0] <<  " " << array.data[1] << std::endl;
             pub.publish(array);
         }
-        if (key == 'l') {
+        if (key == 'r'){
             array.data.clear();
             array.data.push_back(ACTION::ROTATE_RIGHT);
-            array.data.push_back(30.0);
-            std::cerr << array.data[0] <<  " "<< array.data[1] << std::endl;
+            array.data.push_back(10.0);
+            std::cerr << array.data[0] <<  " " << array.data[1] << std::endl;
             pub.publish(array);
         }
         ros::spinOnce();

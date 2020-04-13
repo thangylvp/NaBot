@@ -4,6 +4,7 @@
 #include "std_msgs/MultiArrayDimension.h"
 #include "std_msgs/MultiArrayLayout.h"
 #include "std_msgs/Int8.h"
+#include "std_msgs/Int16.h"
 #include "tf/tf.h"
 #include "geometry_msgs/PoseStamped.h"
 #include "std_msgs/String.h"
@@ -23,13 +24,14 @@ namespace CONTROL
     };
 
     enum ACTION {
-        FORWARD = 0,
-        LEFT = 1,
-        BACK = 2,
-        RIGHT = 3,
-        ROTATE_LEFT = 4,
-        ROTATE_RIGHT = 5,
-        STOP = 6
+	    STOP = 0,
+        FORWARD = 1,
+        RIGHT = 2,
+        BACK = 3,
+        LEFT = 4,
+        ROTATE_LEFT = 5,
+        ROTATE_RIGHT = 6,
+        INTERRUPT = -1
     };
 
     class Controller{
@@ -66,7 +68,8 @@ namespace CONTROL
         ros::Subscriber subRobotPose;
         ros::Publisher pubCommand;
         ros::Publisher pubState;
-        std_msgs::Int8 command, rState;
+        std_msgs::Int8 rState;
+        std_msgs::Int16 command;
 
         tf::TransformListener tf_listener;
         tf::StampedTransform transform_map_baselink;

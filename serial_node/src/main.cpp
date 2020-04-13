@@ -2,46 +2,86 @@
 #include <serial/serial.h>
 #include <std_msgs/String.h>
 #include <std_msgs/Empty.h>
-#include "std_msgs/Int8.h"
+#include "std_msgs/Int16.h"
 #include <string.h>
 #include <stdio.h>
+#include <string>
 
 serial::Serial ser;
 
+std::string charToString(char a){
+    std::string s = ""; 
+    s = s + a;
+    return s;
+}
+
 enum ACTION {
-    FORWARD = 0,
-    LEFT = 1,
-    BACK = 2,
-    RIGHT = 3,
-    ROTATE_LEFT = 4,
-    ROTATE_RIGHT = 5,
-    STOP = 6
+    STOP = 0,
+    FORWARD = 1,
+    RIGHT = 2,
+    BACK = 3,
+    LEFT = 4,
+    ROTATE_LEFT = 5,
+    ROTATE_RIGHT = 6,
+    INTERRUPT = -1
 };
 
-void cmd_callback(const std_msgs::Int8::ConstPtr& msg)
+void cmd_callback(const std_msgs::Int16::ConstPtr& msg)
 {
     ROS_INFO_STREAM("Writing from serial port " <<  msg->data);
+    if (msg->data == STOP){
+        int f = 0;
+        char a = (char)f;
+        std::string s = charToString(a);
+        ser.write(s);
+    } 
     if (msg->data == FORWARD){
-        ser.write("u");
+        int f = 1;
+        char a = (char)f;
+        std::string s = charToString(a);
+        ser.write(s);
     }
-    if (msg->data == LEFT){
-        ser.write("l");
+    if (msg->data == RIGHT){
+        int f = 2;
+        char a = (char)f;
+        std::string s = charToString(a);
+        ser.write(s);
     } 
     if (msg->data == BACK){
-        ser.write("d");
+        int f = 3;
+        char a = (char)f;
+        std::string s = charToString(a);
+        ser.write(s);
     } 
-    if (msg->data == RIGHT){
-        ser.write("d");
+    if (msg->data == LEFT){
+        int f = 4;
+        char a = (char)f;
+        std::string s = charToString(a);
+        ser.write(s);
     } 
     if (msg->data == ROTATE_LEFT){
-        ser.write("e");
+
+        int f = 20;
+        char a = (char)f;
+        std::string s = charToString(a);
+        ser.write(s);
     } 
     if (msg->data == ROTATE_RIGHT){
-        ser.write("f");
+        
+        int f = -10;
+        f = f*(-1) + 128;
+        char a = (char)f;
+        std::string s = charToString(a);
+        ser.write(s);
     } 
-    if (msg->data == STOP){
-        ser.write("q");
+    if (msg->data == INTERRUPT){
+        
+        int f = -1;
+        char a = (char)f;
+        std::string s = charToString(a);
+        ser.write(s);
     } 
+
 }
 
 int main (int argc, char** argv){
@@ -51,13 +91,13 @@ int main (int argc, char** argv){
     std_msgs::String status;
     status.data = "ok";
      
-    ros::Subscriber cmd_sub = nh.subscribe("cmd", 1000, cmd_callback);
+    ros::Subscriber cmd_sub = nh.subscribe("control_command", 1000, cmd_callback);
     ros::Publisher status_pub = nh.advertise<std_msgs::String>("status", 1000);
 
     try
     {
         ser.setPort(argv[1]);
-        ser.setBaudrate(9600);
+        ser.setBaudrate(115200);
         serial::Timeout to = serial::Timeout::simpleTimeout(1000);
         ser.setTimeout(to);
         ser.open();
@@ -82,6 +122,14 @@ int main (int argc, char** argv){
 	    std::string tmp;
 	    fflush(stdin);
 
+        if(ser.available()){
+            ROS_INFO_STREAM("Reading from serial port");
+            std_msgs::String result;
+            result.data = ser.read(ser.available());
+            ROS_INFO_STREAM("Read: " << result.data);
+            status_pub.publish(result);
+            ser.flush();
+        }
         loop_rate.sleep();
     }
 }

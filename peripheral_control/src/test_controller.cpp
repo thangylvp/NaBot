@@ -17,7 +17,7 @@ int main(int argc, char **argv)
 
  	while (ros::ok())
  	{
-		ROS_INFO("CUR POS -> x: [%f], y: [%f], z: [%f]", main_controller.curRobotPose.pose.position.x, main_controller.curRobotPose.pose.position.y, main_controller.curRobotPose.pose.position.z);
+		// ROS_INFO("CUR POS -> x: [%f], y: [%f], z: [%f]", main_controller.curRobotPose.pose.position.x, main_controller.curRobotPose.pose.position.y, main_controller.curRobotPose.pose.position.z);
 		// main_controller.updateTransform();
 
 		switch (main_controller.curRState)
@@ -39,3 +39,4 @@ int main(int argc, char **argv)
 	}
 	return 0;
 }
+
