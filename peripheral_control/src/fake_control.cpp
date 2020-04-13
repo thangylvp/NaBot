@@ -53,14 +53,15 @@ void chatter9(const std_msgs::Int8::ConstPtr& msg)
 
 
 enum ACTION {
-        FORWARD = 0,
-        LEFT = 1,
-        BACK = 2,
-        RIGHT = 3,
-        ROTATE_LEFT = 4,
-        ROTATE_RIGHT = 5,
-        STOP = 6
-    };
+    STOP = 0,
+    FORWARD = 1,
+    RIGHT = 2,
+    BACK = 3,
+    LEFT = 4,
+    ROTATE_LEFT = 5,
+    ROTATE_RIGHT = 6,
+    INTERRUPT = -1
+};
 
 int main(int argc, char **argv)
 {
@@ -74,9 +75,30 @@ int main(int argc, char **argv)
  	{
 		// ROS_INFO("CUR POS -> x: [%f], y: [%f], z: [%f]", main_controller.curOdom.pose.pose.position.x, main_controller.curOdom.pose.pose.position.y, main_controller.curOdom.pose.pose.position.z);
 		char key = getkey();
-        if (key == 'u') {
+        if (key == 'w') {
             array.data.clear();
             array.data.push_back(ACTION::FORWARD);
+            array.data.push_back(1.0);
+            std::cerr << array.data[0] <<  " " << array.data[1] << std::endl;
+            pub.publish(array);
+        }
+        if (key == 'a') {
+            array.data.clear();
+            array.data.push_back(ACTION::LEFT);
+            array.data.push_back(0.5);
+            std::cerr << array.data[0] <<  " " << array.data[1] << std::endl;
+            pub.publish(array);
+        }
+        if (key == 'd') {
+            array.data.clear();
+            array.data.push_back(ACTION::RIGHT);
+            array.data.push_back(0.5);
+            std::cerr << array.data[0] <<  " " << array.data[1] << std::endl;
+            pub.publish(array);
+        }
+        if (key == 'x') {
+            array.data.clear();
+            array.data.push_back(ACTION::BACK);
             array.data.push_back(1.0);
             std::cerr << array.data[0] <<  " " << array.data[1] << std::endl;
             pub.publish(array);
