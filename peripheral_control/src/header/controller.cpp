@@ -1,8 +1,9 @@
 #include "controller.h"
 
-CONTROL::Controller::Controller(std::string odomTopic, std::string pathplnTopic) {
+CONTROL::Controller::Controller(std::string odomTopic, std::string pathplnTopic, std::string robotPoseTopic) {
     subOdom = nh.subscribe(odomTopic, 1, &Controller::odomCallback, this);
     subPathpln = nh.subscribe(pathplnTopic, 1, &Controller::pathplnCallback, this);
+    subRobotPose = nh.subscribe(robotPoseTopic, 1, &Controller::robotPoseCallback, this);
     pubCommand = nh.advertise<std_msgs::Int8>("control_command", 10);
     pubState = nh.advertise<std_msgs::Int8>("robot_state", 10);
 }
@@ -25,6 +26,10 @@ void CONTROL::Controller::sendState() {
 
 void CONTROL::Controller::odomCallback(const nav_msgs::Odometry::ConstPtr& msg) {
     curOdom = *msg;
+}
+
+void CONTROL::Controller::robotPoseCallback(const geometry_msgs::PoseStamped::ConstPtr& msg) {
+    curRobotPose = *msg;
 }
 
 void CONTROL::Controller::pathplnCallback(const std_msgs::Float32MultiArray::ConstPtr& msg) {

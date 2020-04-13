@@ -5,6 +5,7 @@
 #include "std_msgs/MultiArrayLayout.h"
 #include "std_msgs/Int8.h"
 #include "tf/tf.h"
+#include "geometry_msgs/PoseStamped.h"
 #include "std_msgs/String.h"
 #include "nav_msgs/Odometry.h"
 #include "geometry_msgs/Pose2D.h"
@@ -33,13 +34,14 @@ namespace CONTROL
 
     class Controller{
     public:
-        Controller(std::string odomTopic, std::string pathplnTopic);
+        Controller(std::string odomTopic, std::string pathplnTopic, std::string robotPoseTopic);
         ~Controller();
 
         void sendCommand(ACTION actionType);
         void sendState();
         void odomCallback(const nav_msgs::Odometry::ConstPtr& msg);
         void pathplnCallback(const std_msgs::Float32MultiArray::ConstPtr& msg);
+        void robotPoseCallback(const geometry_msgs::PoseStamped::ConstPtr& msg);
         float odomToDistance(nav_msgs::Odometry curOdom, nav_msgs::Odometry preOdom);
         bool checkDoneMoving();
         bool checkDoneTurning();
@@ -54,18 +56,20 @@ namespace CONTROL
         ROBOTSTATE curRState = ROBOTSTATE::IDLE;
         float targetValue;
         ACTION targetAction;
-
+        geometry_msgs::PoseStamped curRobotPose;
 
     private:
         ros::NodeHandle nh;
         ros::Subscriber subOdom;
         ros::Subscriber subPathpln;
+        ros::Subscriber subRobotPose;
         ros::Publisher pubCommand;
         ros::Publisher pubState;
         std_msgs::Int8 command, rState;
 
         tf::TransformListener tf_listener;
         tf::StampedTransform transform_map_baselink;
+        
         
         
         ACTION intToAction[7] = {ACTION::FORWARD, ACTION::LEFT, ACTION::BACK, ACTION::RIGHT, ACTION::ROTATE_LEFT, ACTION::ROTATE_RIGHT, ACTION::STOP};

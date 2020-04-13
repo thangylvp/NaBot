@@ -12,12 +12,13 @@ int main(int argc, char **argv)
 	ros::init(argc, argv, "control_test");
 	std::string odomTopic = "camera/odom/sample";
 	std::string pathplnTopic = "xxx";
-	CONTROL::Controller main_controller(odomTopic, pathplnTopic);
+	std::string robotPoseTopic = "robot_pose";
+	CONTROL::Controller main_controller(odomTopic, pathplnTopic, robotPoseTopic);
 
  	while (ros::ok())
  	{
-		// ROS_INFO("CUR POS -> x: [%f], y: [%f], z: [%f]", main_controller.curOdom.pose.pose.position.x, main_controller.curOdom.pose.pose.position.y, main_controller.curOdom.pose.pose.position.z);
-		main_controller.updateTransform();
+		ROS_INFO("CUR POS -> x: [%f], y: [%f], z: [%f]", main_controller.curRobotPose.pose.position.x, main_controller.curRobotPose.pose.position.y, main_controller.curRobotPose.pose.position.z);
+		// main_controller.updateTransform();
 
 		switch (main_controller.curRState)
 		{
