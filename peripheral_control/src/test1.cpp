@@ -11,6 +11,7 @@
 #include <termios.h>
 #include <time.h>
 #include <iostream>
+#include <fstream>
 #include <vector>
 #include <cmath>
 #include <fstream>
@@ -63,11 +64,31 @@ enum ACTION {
     ROTATE_RIGHT = 6,
     INTERRUPT = -1
 };
-const int numStep = 8;
-ACTION listAction[numStep] = {ACTION::FORWARD, ACTION::RIGHT, ACTION::BACK, ACTION::RIGHT, ACTION::FORWARD, ACTION::RIGHT, ACTION::BACK, ACTION::LEFT};
-float distance[numStep] = {3.0, 0.25, 3.0, 0.25, 3.0, 0.25, 3.0, 0.75 };
+int numAction = 0;
+ACTION listAction[1000] = {ACTION::STOP};
+float distance[1000] = {0};
+std::map<std::string, ACTION> charToAction;
 //ACTION listAction[1] = {ACTION::FORWARD};
 //float distance[1] = {0.2};
+void initCharToAction() {
+    charToAction["F"] = ACTION::FORWARD;
+    charToAction["R"] = ACTION::RIGHT;
+    charToAction["B"] = ACTION::BACK;
+    charToAction["L"] = ACTION::LEFT;
+}
+
+void loadMission(std::string pathToFile) {
+    std::cerr << "PATH NAME " << pathToFile << std::endl;
+    std::ifstream ifs(pathToFile, std::ifstream::in);
+    ifs >> numAction;
+    std::string action;
+    float value;
+    for (int i = 0; i < numAction; i++) {
+        ifs >> action >> value;
+        listAction[i] = charToAction[action];
+        distance[i] = value;
+    }
+}
 int main(int argc, char **argv)
 {
 
@@ -75,6 +96,11 @@ int main(int argc, char **argv)
     ros::NodeHandle n;
 	ros::Subscriber subState = n.subscribe("robot_state", 1, chatter9);
     ros::Publisher pub = n.advertise<std_msgs::Float32MultiArray>("xxx", 1);
+    initCharToAction();
+    loadMission(std::string(argv[1]));
+    for (int i = 0; i < numAction; i++) {
+        std::cerr << "action : " << listAction[i] << " " << distance[i] << std::endl;
+    }
     std_msgs::Float32MultiArray array;
     bool run = true;
     int curStep = 0;
@@ -96,7 +122,7 @@ int main(int argc, char **argv)
             if (newMessage == true) {
                 newMessage = false;
                 if (robotState == 1) {
-                    if (curStep < numStep) {
+                    if (curStep < numAction) {
                         array.data.clear();
                         array.data.push_back(listAction[curStep]);
                         array.data.push_back(distance[curStep]);
