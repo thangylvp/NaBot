@@ -63,9 +63,9 @@ enum ACTION {
     ROTATE_RIGHT = 6,
     INTERRUPT = -1
 };
-
-ACTION listAction[5] = {ACTION::FORWARD, ACTION::RIGHT, ACTION::BACK, ACTION::RIGHT, ACTION::FORWARD};
-float distance[5] = {2.0, 0.2, 2.0, 0.2, 2.0};
+const int numStep = 8;
+ACTION listAction[numStep] = {ACTION::FORWARD, ACTION::RIGHT, ACTION::BACK, ACTION::RIGHT, ACTION::FORWARD, ACTION::RIGHT, ACTION::BACK, ACTION::LEFT};
+float distance[numStep] = {3.0, 0.25, 3.0, 0.25, 3.0, 0.25, 3.0, 0.75 };
 //ACTION listAction[1] = {ACTION::FORWARD};
 //float distance[1] = {0.2};
 int main(int argc, char **argv)
@@ -96,7 +96,7 @@ int main(int argc, char **argv)
             if (newMessage == true) {
                 newMessage = false;
                 if (robotState == 1) {
-                    if (curStep < 5) {
+                    if (curStep < numStep) {
                         array.data.clear();
                         array.data.push_back(listAction[curStep]);
                         array.data.push_back(distance[curStep]);
